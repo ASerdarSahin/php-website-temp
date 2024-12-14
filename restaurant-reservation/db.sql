@@ -33,3 +33,11 @@ CREATE TABLE reservations (
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
     FOREIGN KEY (table_id) REFERENCES tables(id) ON DELETE CASCADE
 );
+
+CREATE TABLE time_slots (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    table_id INT NOT NULL,
+    slot_datetime DATETIME NOT NULL,
+    status ENUM('available', 'reserved') DEFAULT 'available',
+    FOREIGN KEY (table_id) REFERENCES tables(id)
+);
