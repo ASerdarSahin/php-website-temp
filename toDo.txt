@@ -1,0 +1,25 @@
+
+-Update profile
+-More detailed admin panel
+-Currently booking confirmation is a pop up, might replace with e mail.
+-create owner
+-owner can manage bookings, see upcoming reservations.
+-customer see reservation history, receive promotional offer.
+
+
+
+
+**Check code accordance with the course content.
+* Functionality testing.
+* Security?
+* Add warning mechanisms (pop-up, alert, warning mechanisms).
+* See if code satisfies this? "5	Database usage & integrity with DB (tables, CRUD operations)	15	"
+* User(customer), admin, owner are the 3 user roles.
+Might add more functionality or more user roles to users.
+* Documentation and code quality.
+Refine the code if needed,
+add Readme,
+add comments lines.
+* Design, being user-friendly and appealing.
+
+**Customise further to avoid plagiarism accusations lol.
