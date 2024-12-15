@@ -7,10 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $secret_key = $_POST['secret_key'];
+    $hashed_secret_key = password_hash($secret_key, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (username, email, phone, password) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO users (username, email, phone, password, secret_key) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $username, $email, $phone, $password);
+    $stmt->bind_param("sssss", $username, $email, $phone, $password, $hashed_secret_key);
 
     if ($stmt->execute()) {
         header("Location: login.php");

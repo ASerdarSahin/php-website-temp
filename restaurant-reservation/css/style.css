@@ -58,25 +58,72 @@ button:hover {
     background: #45a049;
 }
 
-/* Style for time slot buttons */
-#timeslotContainer {
-    margin-top: 15px;
+.error {
+    color: red;
+    margin-bottom: 10px;
 }
 
-#timeslotContainer button.timeslot-button {
-    margin: 5px;
-    padding: 10px 15px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
+.success {
+    color: green;
+    margin-bottom: 10px;
 }
 
-#timeslotContainer button.timeslot-button.selected {
-    background-color: #007bff;
-    color: #fff;
-    border-color: #007bff;
+/* ...existing styles... */
+
+.promotion-message {
+    border: 1px solid #4CAF50;
+    background-color: #e8f5e9;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
 }
 
-#timeslotContainer button.timeslot-button:hover {
-    background-color: #e0e0e0;
+.promotion-message h3 {
+    margin-top: 0;
+    color: #388E3C;
+}
+
+/* ...existing styles... */
+
+/* Styles for messages */
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.message.success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+
+.message.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+}
+
+/* ...existing styles... */
+
+/* Navbar Styles */
+nav {
+    background-color: #333;
+    overflow: hidden;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+nav a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: black;
 }

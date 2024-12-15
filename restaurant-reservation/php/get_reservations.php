@@ -2,10 +2,7 @@
 header('Content-Type: application/json');
 
 // Database connection
-$conn = new mysqli('localhost', 'user', 'your_password', 'restaurant_reservation');
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include('connection.php');
 
 $user_id = $_GET['user_id']; // Pass this as a GET parameter
 $role = $_GET['role']; // Either 'customer' or 'admin'

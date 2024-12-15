@@ -9,6 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $reservation_id = $_POST['reservation_id'];
 $user_id = $_SESSION['user_id'];
+$user_role = $_SESSION['role'];
 $is_admin = isset($_POST['admin']) && $_SESSION['role'] === 'admin';
 
 try {
@@ -31,7 +32,7 @@ try {
     $reservation = $result->fetch_assoc();
 
     // Check if user is authorized to cancel
-    if (!$is_admin && $reservation['user_id'] != $user_id) {
+    if (!$is_admin && $reservation['user_id'] != $user_id && $user_role !== 'owner') {
         throw new Exception('Unauthorized action.');
     }
 

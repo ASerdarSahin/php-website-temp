@@ -38,10 +38,21 @@ try {
     // Set restaurant_id (assuming single restaurant with id = 1)
     $restaurant_id = 1;
 
-    // Insert reservation
-    $sql = "INSERT INTO reservations (user_id, restaurant_id, table_id, date, time) VALUES (?, ?, ?, ?, ?)";
+    // Generate a unique confirmation number
+    do {
+        $confirmation_number = strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 8));
+        // Check for uniqueness
+        $confCheckSql = "SELECT id FROM reservations WHERE confirmation_number = ?";
+        $confCheckStmt = $conn->prepare($confCheckSql);
+        $confCheckStmt->bind_param('s', $confirmation_number);
+        $confCheckStmt->execute();
+        $confCheckResult = $confCheckStmt->get_result();
+    } while ($confCheckResult->num_rows > 0);
+
+    // Insert reservation with confirmation number
+    $sql = "INSERT INTO reservations (user_id, restaurant_id, table_id, date, time, confirmation_number) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('iiiss', $user_id, $restaurant_id, $table_id, $date, $time);
+    $stmt->bind_param('iiisss', $user_id, $restaurant_id, $table_id, $date, $time, $confirmation_number);
     $stmt->execute();
 
     // Update time slot status
@@ -69,8 +80,15 @@ try {
     $updateTableStmt->bind_param('i', $table_id);
     $updateTableStmt->execute();
 
+    // Commit transaction
     $conn->commit();
-    echo json_encode(['success' => true, 'message' => 'Reservation successful!']);
+
+    // Send a single JSON response with confirmation number
+    echo json_encode([
+        'success' => true,
+        'message' => 'Reservation successful!',
+        'confirmation_number' => $confirmation_number
+    ]);
 
 } catch (Exception $e) {
     $conn->rollback();

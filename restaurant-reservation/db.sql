@@ -4,14 +4,17 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL, -- Hashed password
     email VARCHAR(100) NOT NULL UNIQUE,
     phone VARCHAR(15),
-    role ENUM('customer', 'admin') DEFAULT 'customer'
+    secret_key VARCHAR(255),
+    message TEXT,
+    role ENUM('customer', 'admin', 'owner') DEFAULT 'customer'
 );
 
 CREATE TABLE restaurants (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     address TEXT NOT NULL,
-    phone VARCHAR(15) NOT NULL
+    phone VARCHAR(15) NOT NULL,
+    promotion_message TEXT
 );
 
 CREATE TABLE tables (
@@ -29,6 +32,8 @@ CREATE TABLE reservations (
     table_id INT NOT NULL,
     date DATE NOT NULL,
     time TIME NOT NULL,
+    confirmation_number VARCHAR(10) UNIQUE,
+    status ENUM('active', 'canceled') DEFAULT 'active',
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
     FOREIGN KEY (table_id) REFERENCES tables(id) ON DELETE CASCADE
