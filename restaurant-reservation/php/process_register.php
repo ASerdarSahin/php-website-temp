@@ -3,12 +3,20 @@ session_start();
 include 'connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
+    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $phone = trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING));
+    $secret_key = trim(filter_input(INPUT_POST, 'secret_key', FILTER_SANITIZE_STRING));
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $secret_key = $_POST['secret_key'];
     $hashed_secret_key = password_hash($secret_key, PASSWORD_DEFAULT);
+
+    $checkSql = "SELECT id FROM users WHERE username = ? OR email = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param('ss', $username, $email);
+    $checkStmt->execute();
+    if ($checkStmt->get_result()->num_rows > 0) {
+    throw new Exception('Username or email already exists.');
+    }
 
     $sql = "INSERT INTO users (username, email, phone, password, secret_key) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);

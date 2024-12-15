@@ -1,6 +1,9 @@
 <?php
-// Start the session at the very beginning
 session_start();
+if(isset($_SESSION['user_id'])) {
+    header('Location: profile.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +36,7 @@ session_start();
         </form>
         <p>Don't have an account? <a href="register.php">Register here</a></p>
         <p><a href="forgot_password.php">Forgot Password?</a></p>
+        <?php include('footer.php'); ?>
     </div>
 </body>
 </html>

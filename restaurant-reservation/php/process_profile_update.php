@@ -8,9 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 include('connection.php');
 
 $user_id = $_SESSION['user_id'];
-$username = $_POST['username'];
-$email = $_POST['email'];
-$phone = $_POST['phone'];
+$username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
+$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$phone = trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING));
 $password = $_POST['password'];
 
 try {

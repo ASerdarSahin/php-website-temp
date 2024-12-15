@@ -1,5 +1,12 @@
 <?php
 // filepath: /php/check_reservation.php
+session_start(); // Initialize session
+
+// If the user is logged in, redirect them to their profile
+if(isset($_SESSION['user_id'])) {
+    header('Location: profile.php');
+    exit();
+}
 include('connection.php');
 
 $confirmation_number = '';
@@ -53,5 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
 
     <p><a href="../index.php">Back to Home</a></p>
+    <?php include('footer.php'); ?>
 </body>
 </html>

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if(isset($_SESSION['user_id'])) {
+    header('Location: profile.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,6 +25,7 @@
             <button type="submit">Register</button>
         </form>
         <p>Already have an account? <a href="login.php">Login here</a></p>
+        <?php include('footer.php'); ?>
     </div>
 </body>
 </html>

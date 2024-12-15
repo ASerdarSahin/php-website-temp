@@ -1,5 +1,9 @@
 <?php
 session_start();
+if(isset($_SESSION['user_id'])) {
+    header('Location: profile.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +40,7 @@ session_start();
             <button type="submit">Reset Password</button>
         </form>
         <p><a href="login.php">Back to Login</a></p>
+        <?php include('footer.php'); ?>
     </div>
 </body>
 </html>

@@ -33,5 +33,6 @@ $user = $stmt->get_result()->fetch_assoc();
         <button type="submit">Update Profile</button>
     </form>
     <p><a href="profile.php">Back to Profile</a></p>
+    <?php include('footer.php'); ?>
 </body>
 </html>

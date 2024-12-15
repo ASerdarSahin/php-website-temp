@@ -38,9 +38,8 @@ session_start();
             <p>If you've already made a reservation, you can <a href="php/check_reservation.php">check your reservation</a> using your confirmation number.</p>
         <?php endif; ?>
     </main>
-    <footer>
-        <p>&copy; 2024 Restaurant Reservation System</p>
-    </footer>
+    <?php include('php/footer.php'); ?>
+
     <!-- Conditionally Load JavaScript Only for Logged-in Users -->
     <?php if(isset($_SESSION['user_id'])): ?>
         <script src="js/script.js"></script>

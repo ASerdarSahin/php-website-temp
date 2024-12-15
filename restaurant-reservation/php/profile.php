@@ -95,5 +95,6 @@ $promoData = $promoResult->fetch_assoc();
     <!-- Add link to edit profile -->
     <p><a href="profile_edit.php">Edit Profile</a></p>
     <p><a href="../index.php">Back to Home</a></p>
+    <?php include('footer.php'); ?>
 </body>
 </html>

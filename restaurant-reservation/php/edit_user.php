@@ -52,5 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">Update Role</button>
     </form>
     <p><a href="admin_panel.php">Back to Admin Panel</a></p>
+    <?php include('footer.php'); ?>
 </body>
 </html>

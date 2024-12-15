@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_promotion'])) 
             <th>Phone</th>
             <th>Role</th>
             <th>Individual Message</th>
+            <th>Action</th>
         </tr>
         <?php while ($user = $users->fetch_assoc()): ?>
             <tr>
@@ -140,5 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_promotion'])) 
     </form>
 
     <p><a href="../index.php">Back to Home</a></p>
+    <?php include('footer.php'); ?>
 </body>
 </html>
