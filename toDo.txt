@@ -1,12 +1,14 @@
 
--Update profile
--More detailed admin panel
--Currently booking confirmation is a pop up, might replace with e mail.
--create owner
--owner can manage bookings, see upcoming reservations.
--customer see reservation history, receive promotional offer.
++Update profile
++More detailed admin panel
++create owner
++owner can manage bookings, see upcoming reservations.
++customer see reservation history, receive promotional offer.
++global promotional offer/message.
 
-
+-Currently booking confirmation is a message, might replace with e mail.
+-Check code redundancy.
+-Redo style and structure of the website.
 
 
 **Check code accordance with the course content.
