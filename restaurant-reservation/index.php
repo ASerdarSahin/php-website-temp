@@ -6,7 +6,6 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <title>Restaurant Reservation System</title>
-    <!-- Link to External CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,33 +13,67 @@ session_start();
         <h1>Welcome to the Restaurant Reservation System</h1>
         <?php include('php/navbar.php'); ?>
     </header>
-    <main>
-        <?php if(isset($_SESSION['user_id'])): ?>
-            <p>Start making your reservations now!</p>
-            <form id="reservationForm">
-                <label for="table">Select Table:</label>
-                <select id="table" name="table_id" required>
-                    <option value="">Select a table</option>
-                    <!-- Options populated via JavaScript -->
-                </select><br>
 
-                <label for="timeslot">Select Time Slot:</label>
-                <select id="timeslot" name="timeslot_id" required disabled>
-                    <option value="">First select a table</option>
-                    <!-- Options populated via JavaScript -->
-                </select><br>
+    <!-- Hero Image Section -->
+    <div class="hero-image">
+        <img src="images/BannerTemp.png" alt="Restaurant ambiance">
+    </div>
 
-                <button type="submit" disabled>Reserve</button>
-            </form>
-        <?php else: ?>
-            <h2>Welcome to Our Restaurant!</h2>
-            <p>You can make reservations by logging in or registering an account.</p>
-            <p>If you've already made a reservation, you can <a href="php/check_reservation.php">check your reservation</a> using your confirmation number.</p>
-        <?php endif; ?>
+    <main class="main-content">
+        <div class="columns">
+            <!-- Left Column: Restaurant Description -->
+            <div class="description-section">
+                <h2>Experience Fine Dining</h2>
+                <p>Welcome to our elegant restaurant where culinary excellence meets warm hospitality. Our expert chefs craft exquisite dishes using the finest ingredients, creating an unforgettable dining experience.</p>
+                
+                <h3>Our Cuisine</h3>
+                <p>Indulge in our carefully curated menu featuring both traditional favorites and innovative culinary creations. Each dish is prepared with passion and precision, ensuring a memorable dining experience.</p>
+                
+                <h3>Atmosphere</h3>
+                <p>Enjoy your meal in our sophisticated yet comfortable dining room, perfect for both intimate dinners and special celebrations. Our attentive staff ensures impeccable service throughout your visit.</p>
+            </div>
+
+            <!-- Right Column: Reservation Section -->
+            <div class="reservation-section">
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <div class="reservation-box">
+                        <h2>Make a Reservation</h2>
+                        <form id="reservationForm">
+                            <label for="table">Select Table:</label>
+                            <select id="table" name="table_id" required>
+                                <option value="">Select a table</option>
+                                <!-- Options populated via JavaScript -->
+                            </select><br>
+
+                            <label for="timeslot">Select Time Slot:</label>
+                            <select id="timeslot" name="timeslot_id" required disabled>
+                                <option value="">First select a table</option>
+                                <!-- Options populated via JavaScript -->
+                            </select><br>
+
+                            <button type="submit" disabled>Reserve</button>
+                        </form>
+                    </div>
+                <?php else: ?>
+                    <div class="welcome-box">
+                        <h2>Welcome to Our Restaurant!</h2>
+                        <p>To make a reservation, please log in or create an account.</p>
+                        <div class="action-buttons">
+                            <a href="php/login.php" class="btn btn-primary">Login</a>
+                            <a href="php/register.php" class="btn btn-secondary">Register</a>
+                        </div>
+                        <p class="check-reservation">
+                            Already have a reservation? 
+                            <a href="php/check_reservation.php">Check status here</a>
+                        </p>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
     </main>
+
     <?php include('php/footer.php'); ?>
 
-    <!-- Conditionally Load JavaScript Only for Logged-in Users -->
     <?php if(isset($_SESSION['user_id'])): ?>
         <script src="js/script.js"></script>
     <?php endif; ?>

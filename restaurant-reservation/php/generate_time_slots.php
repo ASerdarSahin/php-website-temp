@@ -1,8 +1,8 @@
 <?php
 include('connection.php');
 
-$start_date = '2024-12-15'; // Start date
-$end_date = '2024-12-15';   // End date
+$start_date = '2025-01-01'; // Start date
+$end_date = '2025-01-01';   // End date
 $opening_time = '18:00';
 $closing_time = '22:00';
 $slot_duration = 1; // Slot duration in hours
