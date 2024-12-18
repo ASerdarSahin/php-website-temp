@@ -10,7 +10,7 @@ session_start();
 </head>
 <body>
     <header>
-        <h1>Welcome to the Restaurant Reservation System</h1>
+        <h1 class="header-welcome">Welcome to the Restaurant Reservation System</h1>
         <?php include('php/navbar.php'); ?>
     </header>
 

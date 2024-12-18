@@ -351,3 +351,11 @@ footer {
 .contact-info a:hover {
     text-decoration: underline;
 }
+
+/* Header Welcome Text with Bottom Border */
+.header-welcome {
+    border-bottom: 4px solid #34495e; /* Darker line */
+    display: inline-block;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
