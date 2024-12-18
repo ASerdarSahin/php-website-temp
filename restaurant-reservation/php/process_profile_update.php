@@ -40,4 +40,14 @@ try {
     header('Location: profile_edit.php?error=' . urlencode($e->getMessage()));
     exit();
 }
+
+  finally {
+    if (isset($checkStmt)) {
+        $checkStmt->close();
+    }
+    if (isset($stmt)) {
+        $stmt->close();
+    }
+    $conn->close();
+}
 ?>

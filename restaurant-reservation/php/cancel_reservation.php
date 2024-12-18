@@ -99,6 +99,12 @@ try {
     }
     exit();
 } finally {
+    if (isset($stmt)) {
+        $stmt->close();
+    }
+    if (isset($updateStmt)) {
+        $updateStmt->close();
+    }
     $conn->close();
 }
 ?>

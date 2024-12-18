@@ -1,6 +1,7 @@
 <?php
+// filepath: /php/register.php
 session_start();
-if(isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
 }
@@ -13,19 +14,49 @@ if(isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+    <!-- Include Navbar -->
     <?php include('navbar.php'); ?>
-    <div class="form-container">
-        <h2>Register</h2>
-        <form action="process_register.php" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="tel" name="phone" placeholder="Phone Number" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="secret_key" placeholder="Secret Key (used for password recovery)" required>
-            <button type="submit">Register</button>
-        </form>
-        <p>Already have an account? <a href="login.php">Login here</a></p>
-        <?php include('footer.php'); ?>
-    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="form-container">
+            <h2>Register</h2>
+                <?php
+                // filepath: /php/register.php
+                // ...existing code...
+                if (isset($_SESSION['error'])) {
+                    echo '<p class="error">' . htmlspecialchars($_SESSION['error']) . '</p>';
+                    unset($_SESSION['error']);
+                }
+                // ...existing code...
+                ?>
+            <form action="process_register.php" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" placeholder="Username" required>
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required>
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+
+                <label for="secret_key">Secret Key (used for password recovery):</label>
+                <input type="text" name="secret_key" id="secret_key" placeholder="Secret Key" required>
+
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? 
+                    <div class="button-container" style="text-align: center; margin-top: 20px;">
+                        <button onclick="window.location.href='login.php'" class="edit-button">Login here</button>
+                    </div> 
+            </p>
+        </div>
+    </main>
+
+    <!-- Include Footer -->
+    <?php include('footer.php'); ?>
 </body>
 </html>

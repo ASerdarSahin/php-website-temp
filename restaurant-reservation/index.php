@@ -16,7 +16,7 @@ session_start();
 
     <!-- Hero Image Section -->
     <div class="hero-image">
-        <img src="images/BannerTemp.png" alt="Restaurant ambiance">
+        <img src="images/jason-leung-poI7DelFiVA-unsplash.jpg" alt="Restaurant ambiance"> 
     </div>
 
     <main class="main-content">
@@ -31,6 +31,7 @@ session_start();
                 
                 <h3>Atmosphere</h3>
                 <p>Enjoy your meal in our sophisticated yet comfortable dining room, perfect for both intimate dinners and special celebrations. Our attentive staff ensures impeccable service throughout your visit.</p>
+                Photo by <a href="https://unsplash.com/@ninjason?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Jason Leung</a> on <a href="https://unsplash.com/photos/photo-of-pub-set-in-room-during-daytime-poI7DelFiVA?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
             </div>
 
             <!-- Right Column: Reservation Section -->
@@ -63,8 +64,10 @@ session_start();
                             <a href="php/register.php" class="btn btn-secondary">Register</a>
                         </div>
                         <p class="check-reservation">
-                            Already have a reservation? 
-                            <a href="php/check_reservation.php">Check status here</a>
+                            Already have a reservation?
+                            <div class="button-container" style="text-align: center; margin-top: 20px;">
+                            <button onclick="window.location.href='php/check_reservation.php'" class="edit-button">Check status here</button>
+                            </div> 
                         </p>
                     </div>
                 <?php endif; ?>

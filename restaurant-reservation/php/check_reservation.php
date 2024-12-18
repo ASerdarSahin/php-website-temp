@@ -3,7 +3,7 @@
 session_start(); // Initialize session
 
 // If the user is logged in, redirect them to their profile
-if(isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
 }
@@ -40,26 +40,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+    <!-- Include Navbar -->
     <?php include('navbar.php'); ?>
-    <h2>Check Your Reservation</h2>
-    <form method="POST">
-        <input type="text" name="confirmation_number" placeholder="Confirmation Number" value="<?php echo htmlspecialchars($confirmation_number); ?>" required>
-        <button type="submit">Check Reservation</button>
-    </form>
 
-    <?php if ($error): ?>
-        <p class="error"><?php echo htmlspecialchars($error); ?></p>
-    <?php elseif ($reservation): ?>
-        <h3>Reservation Details</h3>
-        <p><strong>Reservation ID:</strong> <?php echo $reservation['id']; ?></p>
-        <p><strong>Date:</strong> <?php echo $reservation['date']; ?></p>
-        <p><strong>Time:</strong> <?php echo $reservation['time']; ?></p>
-        <p><strong>Table ID:</strong> <?php echo $reservation['table_id']; ?></p>
-        <p><strong>Table Capacity:</strong> <?php echo $reservation['capacity']; ?> seats</p>
-        <p><strong>Status:</strong> <?php echo ucfirst($reservation['status']); ?></p>
-    <?php endif; ?>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="form-container">
+            <h2>Check Your Reservation</h2>
+            <form method="POST">
+                <label for="confirmation_number">Confirmation Number:</label>
+                <input type="text" name="confirmation_number" id="confirmation_number" placeholder="Confirmation Number" value="<?php echo htmlspecialchars($confirmation_number); ?>" required>
+                <button type="submit">Check Reservation</button>
+            </form>
 
-    <p><a href="../index.php">Back to Home</a></p>
+            <?php if ($error): ?>
+                <p class="error"><?php echo htmlspecialchars($error); ?></p>
+            <?php elseif ($reservation): ?>
+                <h3>Reservation Details</h3>
+                <p><strong>Reservation ID:</strong> <?php echo $reservation['id']; ?></p>
+                <p><strong>Date:</strong> <?php echo $reservation['date']; ?></p>
+                <p><strong>Time:</strong> <?php echo $reservation['time']; ?></p>
+                <p><strong>Table ID:</strong> <?php echo $reservation['table_id']; ?></p>
+                <p><strong>Table Capacity:</strong> <?php echo $reservation['capacity']; ?> seats</p>
+                <p><strong>Status:</strong> <?php echo ucfirst($reservation['status']); ?></p>
+            <?php endif; ?>
+
+            <div class="button-container" style="text-align: center; margin-top: 20px;">
+            <button onclick="window.location.href='../index.php'" class="edit-button">Back to Home</button>
+            </div>
+        </div>
+
+        
+    </main>
+
+    <!-- Include Footer -->
     <?php include('footer.php'); ?>
 </body>
 </html>
