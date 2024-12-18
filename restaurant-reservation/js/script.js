@@ -5,41 +5,40 @@ $(document).ready(function() {
         return;
     }
 
-    const restaurantSelect = $('#restaurant');
     const tableSelect = $('#table');
     const timeslotSelect = $('#timeslot');
     const reserveButton = reservationForm.find('button[type="submit"]');
 
-    // Fetch available tables when a restaurant is selected
-    restaurantSelect.on('change', function() {
-        const restaurantId = $(this).val();
-        tableSelect.empty().append('<option value="">Select a table</option>').prop('disabled', true);
-        timeslotSelect.empty().append('<option value="">Select a table first</option>').prop('disabled', true);
-        reserveButton.prop('disabled', true);
-
-        if (restaurantId) {
-            $.ajax({
-                url: 'php/get_tables.php',
-                method: 'GET',
-                data: { restaurant_id: restaurantId },
-                dataType: 'json',
-                success: function(data) {
-                    if (data.length === 0) {
-                        tableSelect.append('<option value="">No available tables</option>');
-                    } else {
-                        $.each(data, function(index, table) {
-                            tableSelect.append(`<option value="${table.id}">Table ${table.id} (Seats: ${table.capacity})</option>`);
-                        });
-                        tableSelect.prop('disabled', false);
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching tables:', textStatus, errorThrown);
-                    showMessage('Failed to load tables. Please try again.', 'error');
+    // Function to fetch and populate available tables
+    function fetchTables() {
+        $.ajax({
+            url: 'php/get_tables.php',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                tableSelect.empty().append('<option value="">Select a table</option>');
+                if (data.success === false) {
+                    showMessage(data.message, 'error');
+                    return;
                 }
-            });
-        }
-    });
+                if (data.length === 0) {
+                    tableSelect.append('<option value="">No available tables</option>');
+                } else {
+                    $.each(data, function(index, table) {
+                        tableSelect.append(`<option value="${table.id}">Table ${table.id} (Seats: ${table.capacity})</option>`);
+                    });
+                    tableSelect.prop('disabled', false);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching tables:', textStatus, errorThrown);
+                showMessage('Failed to load tables. Please try again.', 'error');
+            }
+        });
+    }
+
+    // Initial fetch of tables on page load
+    fetchTables();
 
     // Fetch available time slots when a table is selected
     tableSelect.on('change', function() {
@@ -54,6 +53,10 @@ $(document).ready(function() {
                 data: { table_id: tableId },
                 dataType: 'json',
                 success: function(data) {
+                    if (data.success === false) {
+                        showMessage(data.message, 'error');
+                        return;
+                    }
                     if (data.length === 0) {
                         timeslotSelect.append('<option value="">No available time slots</option>');
                     } else {
@@ -94,7 +97,7 @@ $(document).ready(function() {
                 if (data.success) {
                     showMessage(`Reservation successful! Your confirmation number is: ${data.confirmation_number}`, 'success');
                     // Remove the reserved time slot from the dropdown
-                    timeslotSelect.find(`option[value="${data.timeslot_id}"]`).remove();
+                    timeslotSelect.find(`option[value="${reservationForm.find('select[name="timeslot_id"]').val()}"]`).remove();
                     // Reset the form
                     reservationForm[0].reset();
                     tableSelect.prop('disabled', true);
