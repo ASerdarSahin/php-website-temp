@@ -1,128 +1,129 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const reservationForm = document.getElementById('reservationForm');
+$(document).ready(function() {
+    const reservationForm = $('#reservationForm');
 
-    if (!reservationForm) {
-        // Reservation form not present; do not execute reservation-related scripts
+    if (reservationForm.length === 0) {
         return;
     }
 
-    const tableSelect = document.getElementById('table');
-    const timeslotSelect = document.getElementById('timeslot');
-    const reserveButton = document.querySelector('#reservationForm button[type="submit"]');
+    const restaurantSelect = $('#restaurant');
+    const tableSelect = $('#table');
+    const timeslotSelect = $('#timeslot');
+    const reserveButton = reservationForm.find('button[type="submit"]');
 
-    // Fetch available tables
-    fetch('php/get_tables.php')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(table => {
-                const option = document.createElement('option');
-                option.value = table.id;
-                option.textContent = `Table ${table.id} (Seats: ${table.capacity})`;
-                tableSelect.appendChild(option);
+    // Fetch available tables when a restaurant is selected
+    restaurantSelect.on('change', function() {
+        const restaurantId = $(this).val();
+        tableSelect.empty().append('<option value="">Select a table</option>').prop('disabled', true);
+        timeslotSelect.empty().append('<option value="">Select a table first</option>').prop('disabled', true);
+        reserveButton.prop('disabled', true);
+
+        if (restaurantId) {
+            $.ajax({
+                url: 'php/get_tables.php',
+                method: 'GET',
+                data: { restaurant_id: restaurantId },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.length === 0) {
+                        tableSelect.append('<option value="">No available tables</option>');
+                    } else {
+                        $.each(data, function(index, table) {
+                            tableSelect.append(`<option value="${table.id}">Table ${table.id} (Seats: ${table.capacity})</option>`);
+                        });
+                        tableSelect.prop('disabled', false);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching tables:', textStatus, errorThrown);
+                    showMessage('Failed to load tables. Please try again.', 'error');
+                }
             });
-        })
-        .catch(error => {
-            console.error('Error fetching tables:', error);
-            // Display error message within the page instead of an alert
-            showMessage('Failed to load tables. Please try again.', 'error');
-        });
+        }
+    });
 
     // Fetch available time slots when a table is selected
-    tableSelect.addEventListener('change', function() {
-        const tableId = this.value;
-        timeslotSelect.innerHTML = '<option value="">Select a time slot</option>';
-        timeslotSelect.disabled = true;
-        reserveButton.disabled = true;
+    tableSelect.on('change', function() {
+        const tableId = $(this).val();
+        timeslotSelect.empty().append('<option value="">Select a time slot</option>').prop('disabled', true);
+        reserveButton.prop('disabled', true);
 
         if (tableId) {
-            fetch(`php/get_time_slots.php?table_id=${tableId}`)
-                .then(response => response.json())
-                .then(data => {
+            $.ajax({
+                url: 'php/get_time_slots.php',
+                method: 'GET',
+                data: { table_id: tableId },
+                dataType: 'json',
+                success: function(data) {
                     if (data.length === 0) {
-                        const option = document.createElement('option');
-                        option.value = "";
-                        option.textContent = "No available time slots";
-                        timeslotSelect.appendChild(option);
+                        timeslotSelect.append('<option value="">No available time slots</option>');
                     } else {
-                        data.forEach(slot => {
-                            const option = document.createElement('option');
-                            option.value = slot.id;
+                        $.each(data, function(index, slot) {
                             const slotDateTime = new Date(slot.slot_datetime);
-                            option.textContent = slotDateTime.toLocaleString();
-                            timeslotSelect.appendChild(option);
+                            const formattedDateTime = slotDateTime.toLocaleString();
+                            timeslotSelect.append(`<option value="${slot.id}">${formattedDateTime}</option>`);
                         });
-                        timeslotSelect.disabled = false;
+                        timeslotSelect.prop('disabled', false);
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching time slots:', error);
-                    // Display error message within the page
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching time slots:', textStatus, errorThrown);
                     showMessage('Failed to load time slots. Please try again.', 'error');
-                });
+                }
+            });
         }
     });
 
     // Enable reserve button when a time slot is selected
-    timeslotSelect.addEventListener('change', function() {
-        reserveButton.disabled = !this.value;
+    timeslotSelect.on('change', function() {
+        reserveButton.prop('disabled', !$(this).val());
     });
 
     // Handle form submission
-    reservationForm.addEventListener('submit', function(event) {
+    reservationForm.on('submit', function(event) {
         event.preventDefault();
-        reserveButton.disabled = true;
-        reserveButton.textContent = 'Reserving...';
-        const formData = new FormData(this);
-        fetch('php/book_table.php', {
+        reserveButton.prop('disabled', true).text('Reserving...');
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: 'php/book_table.php',
             method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            reserveButton.disabled = false;
-            reserveButton.textContent = 'Reserve';
-            if (data.success) {
-                // Display success message within the page
-                showMessage(`Reservation successful! Your confirmation number is: ${data.confirmation_number}`, 'success');
-                
-                // Optionally, remove the reserved time slot from the dropdown
-                const selectedOption = timeslotSelect.querySelector(`option[value="${formData.get('timeslot_id')}"]`);
-                if (selectedOption) {
-                    selectedOption.remove();
+            data: formData,
+            dataType: 'json',
+            success: function(data) {
+                reserveButton.prop('disabled', false).text('Reserve');
+                if (data.success) {
+                    showMessage(`Reservation successful! Your confirmation number is: ${data.confirmation_number}`, 'success');
+                    // Remove the reserved time slot from the dropdown
+                    timeslotSelect.find(`option[value="${data.timeslot_id}"]`).remove();
+                    // Reset the form
+                    reservationForm[0].reset();
+                    tableSelect.prop('disabled', true);
+                    timeslotSelect.prop('disabled', true);
+                    reserveButton.prop('disabled', true);
+                } else {
+                    showMessage(data.message, 'error');
                 }
-                // Reset the form
-                this.reset();
-                timeslotSelect.disabled = true;
-                reserveButton.disabled = true;
-            } else {
-                // Display error message within the page
-                showMessage(data.message, 'error');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                reserveButton.prop('disabled', false).text('Reserve');
+                console.error('Error:', textStatus, errorThrown);
+                showMessage('An unexpected error occurred. Please try again.', 'error');
             }
-        })
-        .catch(error => {
-            reserveButton.disabled = false;
-            reserveButton.textContent = 'Reserve';
-            console.error('Error:', error);
-            showMessage('An unexpected error occurred. Please try again.', 'error');
         });
     });
 
     // Function to display messages within the page
     function showMessage(message, type) {
-        const main = document.querySelector('main');
-        
-        // Remove existing messages
-        const existingMessages = main.querySelectorAll('.message');
-        existingMessages.forEach(msg => msg.remove());
+        const main = $('main');
+        main.find('.message').remove();
 
-        const messagePara = document.createElement('p');
-        messagePara.classList.add('message', type);
-        messagePara.textContent = message;
+        const messagePara = $('<p></p>').addClass(`message ${type}`).text(message);
         main.prepend(messagePara);
 
-        // Automatically remove the message after 5 seconds
         setTimeout(() => {
-            messagePara.remove();
+            messagePara.fadeOut(500, function() {
+                $(this).remove();
+            });
         }, 5000);
     }
 });

@@ -78,6 +78,7 @@ session_start();
     <?php include('php/footer.php'); ?>
 
     <?php if(isset($_SESSION['user_id'])): ?>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/script.js"></script>
     <?php endif; ?>
 </body>
