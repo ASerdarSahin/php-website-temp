@@ -15,10 +15,6 @@
 -add multiple restaurants.
 
 
-
-
-**Check code accordance with the course content.
-
 * Security?
 * Add warning mechanisms (pop-up, alert, warning mechanisms).
 
