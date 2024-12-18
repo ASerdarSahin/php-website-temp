@@ -20,7 +20,6 @@
 
 * Documentation and code quality.
 Refine the code if needed,
-add Readme,
 add comments lines.
 * Design, being user-friendly and appealing.
 
