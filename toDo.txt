@@ -1,4 +1,3 @@
-
 +Update profile
 +More detailed admin panel
 +create owner
@@ -7,20 +6,12 @@
 +global promotional offer/message.
 +check booking info with confirmation number without any user.
 
--Check code redundancy.
 ?error pages for 404 and 500? ask copilot how functional they are?
 -after a table is unavailable it keeps listing it until refresh.
 -reservation cancelled message is just a text displayed on the my profile page.
 (other change smth messages are also just a text)
 -add multiple restaurants.
 
-
-* Security?
-* Add warning mechanisms (pop-up, alert, warning mechanisms).
-
 * Documentation and code quality.
 Refine the code if needed,
 add comments lines.
-* Design, being user-friendly and appealing.
-
-**Customise further to avoid plagiarism accusations lol.
