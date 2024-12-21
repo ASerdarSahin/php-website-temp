@@ -9,6 +9,15 @@ $(document).ready(function() {
     const timeslotSelect = $('#timeslot');
     const reserveButton = reservationForm.find('button[type="submit"]');
 
+    // Add constants for common values
+    const MESSAGE_DISPLAY_TIME = 5000;
+
+    // Extract repeated AJAX error handling into a function
+    function handleAjaxError(error, message) {
+        console.error('Error:', error);
+        showMessage(message || 'An unexpected error occurred. Please try again.', 'error');
+    }
+
     // Function to fetch and populate available tables
     function fetchTables() {
         $.ajax({
@@ -31,8 +40,7 @@ $(document).ready(function() {
                 }
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error fetching tables:', textStatus, errorThrown);
-                showMessage('Failed to load tables. Please try again.', 'error');
+                handleAjaxError(errorThrown, 'Failed to load tables. Please try again.');
             }
         });
     }
@@ -69,8 +77,7 @@ $(document).ready(function() {
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error fetching time slots:', textStatus, errorThrown);
-                    showMessage('Failed to load time slots. Please try again.', 'error');
+                    handleAjaxError(errorThrown, 'Failed to load time slots. Please try again.');
                 }
             });
         }
@@ -109,8 +116,7 @@ $(document).ready(function() {
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 reserveButton.prop('disabled', false).text('Reserve');
-                console.error('Error:', textStatus, errorThrown);
-                showMessage('An unexpected error occurred. Please try again.', 'error');
+                handleAjaxError(errorThrown);
             }
         });
     });
@@ -127,6 +133,6 @@ $(document).ready(function() {
             messagePara.fadeOut(500, function() {
                 $(this).remove();
             });
-        }, 5000);
+        }, MESSAGE_DISPLAY_TIME);
     }
 });
