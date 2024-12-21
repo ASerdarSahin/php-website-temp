@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// Logged in and admin role check
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
     header('Location: login.php');
     exit();
@@ -13,7 +15,7 @@ $page_title = $_SESSION['role'] === 'admin' ? 'Admin' : 'Owner' . ' - Reservatio
 // Get the current page number from GET parameter, default to 1
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 $records_per_page = 20;
-$offset = ($page - 1) * $records_per_page;
+$offset = ($page - 1) * $records_per_page; // Calculate offset for SQL query
 
 // Fetch the total number of reservations to calculate total pages
 $total_reservations_result = $conn->query("SELECT COUNT(*) AS total FROM reservations");
@@ -21,7 +23,7 @@ $total_reservations_row = $total_reservations_result->fetch_assoc();
 $total_reservations = $total_reservations_row['total'];
 $total_pages = ceil($total_reservations / $records_per_page);
 
-// Fetch reservations with LIMIT and OFFSET, ordered by status
+// Fetch reservations with LIMIT and OFFSET, ordered by status and date
 $reservations_sql = "
     SELECT r.id, r.user_id, t.id AS table_id, r.date, r.time, r.status, r.confirmation_number
     FROM reservations r
@@ -34,7 +36,7 @@ $reservations_sql = "
         r.date DESC, r.time DESC
     LIMIT $records_per_page OFFSET $offset
 ";
-$reservations = $conn->query($reservations_sql);
+$reservations = $conn->query($reservations_sql); // Execute the SQL query
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +51,7 @@ $reservations = $conn->query($reservations_sql);
         <h2>Reservation Management</h2>
         
         <?php if (isset($_GET['message'])): ?>
-            <p class="success"><?php echo htmlspecialchars($_GET['message']); ?></p>
+            <p class="success"><?php echo htmlspecialchars($_GET['message']); ?></p> <!-- Display success message if set -->
         <?php endif; ?>
 
         <table>
@@ -63,7 +65,7 @@ $reservations = $conn->query($reservations_sql);
                 <th>Confirmation Number</th>
                 <th>Action</th>
             </tr>
-            <?php while ($reservation = $reservations->fetch_assoc()): ?>
+            <?php while ($reservation = $reservations->fetch_assoc()): ?> <!-- Loop through each reservation to display its data -->
                 <tr>
                     <td><?php echo $reservation['id']; ?></td>
                     <td><?php echo $reservation['user_id']; ?></td>
@@ -73,7 +75,7 @@ $reservations = $conn->query($reservations_sql);
                     <td><?php echo $reservation['status']; ?></td>
                     <td><?php echo htmlspecialchars($reservation['confirmation_number']); ?></td>
                     <td>
-                        <?php if ($reservation['status'] === 'active'): ?>
+                        <?php if ($reservation['status'] === 'active'): ?> <!-- If the reservation is active -->
                             <form action="cancel_reservation.php" method="POST" onsubmit="return confirm('Are you sure you want to cancel this reservation?');">
                                 <input type="hidden" name="reservation_id" value="<?php echo $reservation['id']; ?>">
                                 <input type="hidden" name="<?php echo $_SESSION['role']; ?>" value="1">
@@ -84,24 +86,24 @@ $reservations = $conn->query($reservations_sql);
                         <?php endif; ?>
                     </td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endwhile; ?><!-- End of reservation loop -->
         </table>
 
         <!-- Pagination Links -->
         <div class="pagination">
-            <?php if ($page > 1): ?>
+            <?php if ($page > 1): ?> <!-- Show 'Previous' link if not on the first page -->
                 <a href="reservation_management.php?page=<?php echo $page - 1; ?>">Previous</a>
             <?php endif; ?>
 
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <?php if ($i == $page): ?>
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?> <!-- Loop through each page number -->
+                <?php if ($i == $page): ?> <!-- Highlight the current page number -->
                     <strong><?php echo $i; ?></strong>
-                <?php else: ?>
+                <?php else: ?> <!-- Link to other pages -->
                     <a href="reservation_management.php?page=<?php echo $i; ?>"><?php echo $i; ?></a>
                 <?php endif; ?>
             <?php endfor; ?>
 
-            <?php if ($page < $total_pages): ?>
+            <?php if ($page < $total_pages): ?> <!-- Show 'Next' link if not on the last page -->
                 <a href="reservation_management.php?page=<?php echo $page + 1; ?>">Next</a>
             <?php endif; ?>
         </div>
@@ -109,7 +111,7 @@ $reservations = $conn->query($reservations_sql);
         <!-- Back Button -->
         <div class="button-container" style="text-align: center; margin-top: 20px;">
             <button onclick="window.location.href='<?php echo $return_path; ?>'" class="back-button">
-                Back to <?php echo ucfirst($_SESSION['role']); ?> Panel
+                Back to <?php echo ucfirst($_SESSION['role']); ?> Panel <!-- button label based on role -->
             </button>
         </div>
     </main>

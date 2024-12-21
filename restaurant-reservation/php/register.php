@@ -1,6 +1,7 @@
 <?php
-// filepath: /php/register.php
 session_start();
+
+// Redirect to profile page if user is logged in
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
@@ -22,15 +23,13 @@ if (isset($_SESSION['user_id'])) {
         <div class="form-container">
             <h2>Register</h2>
                 <?php
-                // filepath: /php/register.php
-                // ...existing code...
+                // Display error message if it exists in the session
                 if (isset($_SESSION['error'])) {
                     echo '<p class="error">' . htmlspecialchars($_SESSION['error']) . '</p>';
                     unset($_SESSION['error']);
                 }
-                // ...existing code...
                 ?>
-            <form action="process_register.php" method="POST">
+            <form action="process_register.php" method="POST"> <!-- Form submission to process_register.php -->
                 <label for="username">Username:</label>
                 <input type="text" name="username" id="username" placeholder="Username" required>
 

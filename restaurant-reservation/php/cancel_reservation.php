@@ -2,11 +2,13 @@
 session_start();
 include('connection.php');
 
+// user login check
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
+// Get data from POST request
 $reservation_id = $_POST['reservation_id'];
 $user_id = $_SESSION['user_id'];
 $user_role = $_SESSION['role'];
@@ -20,11 +22,14 @@ try {
     $sql = "SELECT r.user_id, r.table_id, r.date, r.time
             FROM reservations r
             WHERE r.id = ? AND r.status = 'active'";
+
+    // Prepare and execute statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $reservation_id);
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Check if reservation exists and is active
     if ($result->num_rows === 0) {
         throw new Exception('Reservation not found or already canceled.');
     }
@@ -82,6 +87,7 @@ try {
 
     $conn->commit();
 
+    // Redirect with success message
     if ($is_admin) {
         header('Location: admin_panel.php?message=Reservation canceled successfully');
     } else {
@@ -89,7 +95,7 @@ try {
     }
     exit();
 
-} catch (Exception $e) {
+} catch (Exception $e) { 
     $conn->rollback();
     $error_message = urlencode($e->getMessage());
     if ($is_admin) {
@@ -98,7 +104,7 @@ try {
         header("Location: profile.php?error=$error_message");
     }
     exit();
-} finally {
+} finally { // Close statement and connection
     if (isset($stmt)) {
         $stmt->close();
     }

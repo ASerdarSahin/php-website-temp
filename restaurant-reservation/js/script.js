@@ -1,10 +1,14 @@
-$(document).ready(function() {
+$(document).ready(function() { // Wait for the document to be fully loaded
+
+    // Check if the current page is the reservation page
     const reservationForm = $('#reservationForm');
 
+    // If the reservation form is not present, do not run the rest of the script
     if (reservationForm.length === 0) {
         return;
     }
 
+    // Select the form elements
     const tableSelect = $('#table');
     const timeslotSelect = $('#timeslot');
     const reserveButton = reservationForm.find('button[type="submit"]');
@@ -30,16 +34,18 @@ $(document).ready(function() {
                     showMessage(data.message, 'error');
                     return;
                 }
+                
+                // If there are no tables, display a message
                 if (data.length === 0) {
                     tableSelect.append('<option value="">No available tables</option>');
-                } else {
+                } else { // Otherwise, populate the dropdown with the available tables
                     $.each(data, function(index, table) {
                         tableSelect.append(`<option value="${table.id}">Table ${table.id} (Seats: ${table.capacity})</option>`);
                     });
                     tableSelect.prop('disabled', false);
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) { // Handle AJAX errors
                 handleAjaxError(errorThrown, 'Failed to load tables. Please try again.');
             }
         });
@@ -54,7 +60,7 @@ $(document).ready(function() {
         timeslotSelect.empty().append('<option value="">Select a time slot</option>').prop('disabled', true);
         reserveButton.prop('disabled', true);
 
-        if (tableId) {
+        if (tableId) { 
             $.ajax({
                 url: 'php/get_time_slots.php',
                 method: 'GET',
@@ -65,9 +71,11 @@ $(document).ready(function() {
                         showMessage(data.message, 'error');
                         return;
                     }
+
+                    // If there are no time slots, display a message
                     if (data.length === 0) {
                         timeslotSelect.append('<option value="">No available time slots</option>');
-                    } else {
+                    } else { // Otherwise, populate the dropdown with the available time slots
                         $.each(data, function(index, slot) {
                             const slotDateTime = new Date(slot.slot_datetime);
                             const formattedDateTime = slotDateTime.toLocaleString();
@@ -76,7 +84,7 @@ $(document).ready(function() {
                         timeslotSelect.prop('disabled', false);
                     }
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) { // Handle AJAX errors
                     handleAjaxError(errorThrown, 'Failed to load time slots. Please try again.');
                 }
             });
@@ -114,7 +122,7 @@ $(document).ready(function() {
                     showMessage(data.message, 'error');
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
+            error: function(jqXHR, textStatus, errorThrown) { // Handle AJAX errors
                 reserveButton.prop('disabled', false).text('Reserve');
                 handleAjaxError(errorThrown);
             }
@@ -123,12 +131,14 @@ $(document).ready(function() {
 
     // Function to display messages within the page
     function showMessage(message, type) {
-        const main = $('main');
-        main.find('.message').remove();
+        const main = $('main'); // Select the main element
+        main.find('.message').remove(); // Remove any existing messages
 
+        // Create a new message paragraph and prepend it to the main element
         const messagePara = $('<p></p>').addClass(`message ${type}`).text(message);
         main.prepend(messagePara);
 
+        // Fade out and remove the message after a the set time MESSAGE_DISPLAY_TIME
         setTimeout(() => {
             messagePara.fadeOut(500, function() {
                 $(this).remove();

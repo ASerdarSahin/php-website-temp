@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// check user login
 if(isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
@@ -36,7 +38,7 @@ if(isset($_SESSION['user_id'])) {
             }
             ?>
 
-            <form action="process_forgot_password.php" method="POST">
+            <form action="process_forgot_password.php" method="POST"> <!-- Form submission to process_forgot_password.php -->
                 <input type="text" name="username" placeholder="Username" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="tel" name="phone" placeholder="Phone Number" required>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start(); // Start the session to manage user state
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,7 @@ session_start();
 <body>
     <header>
         <h1 class="header-welcome">Welcome to the Restaurant Reservation System</h1>
-        <?php include('php/navbar.php'); ?>
+        <?php include('php/navbar.php'); ?> <!-- Include the navigation bar -->
     </header>
 
     <!-- Hero Image Section -->
@@ -36,7 +36,7 @@ session_start();
 
             <!-- Right Column: Reservation Section -->
             <div class="reservation-section">
-                <?php if(isset($_SESSION['user_id'])): ?>
+                <?php if(isset($_SESSION['user_id'])): ?> <!-- Check if user is logged in -->
                     <div class="reservation-box">
                         <h2>Make a Reservation</h2>
                         <form id="reservationForm">
@@ -55,7 +55,7 @@ session_start();
                             <button type="submit" disabled>Reserve</button>
                         </form>
                     </div>
-                <?php else: ?>
+                <?php else: ?> <!-- If user is not logged in -->
                     <div class="welcome-box">
                         <h2>Welcome to Our Restaurant!</h2>
                         <p>To make a reservation, please log in or create an account.</p>
@@ -75,9 +75,9 @@ session_start();
         </div>
     </main>
 
-    <?php include('php/footer.php'); ?>
+    <?php include('php/footer.php'); ?> <!-- Include the footer -->
 
-    <?php if(isset($_SESSION['user_id'])): ?>
+    <?php if(isset($_SESSION['user_id'])): ?> <!-- If user is logged in, include scripts -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/script.js"></script>
     <?php endif; ?>

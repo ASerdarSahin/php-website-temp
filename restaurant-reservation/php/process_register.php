@@ -1,5 +1,4 @@
 <?php
-// filepath: /php/process_register.php
 
 session_start();
 include 'connection.php';

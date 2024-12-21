@@ -1,4 +1,6 @@
 <?php
+// Visit once to generate time slots
+
 include('connection.php');
 
 $start_date = '2025-01-01'; // Start date
@@ -19,6 +21,7 @@ $period = new DatePeriod(
     (new DateTime($end_date))->modify('+1 day')
 );
 
+// Loop through each date and table to generate time slots
 foreach ($period as $date) {
     foreach ($tables as $table) {
         $current_time = new DateTime($date->format('Y-m-d') . ' ' . $opening_time);

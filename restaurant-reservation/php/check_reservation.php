@@ -1,14 +1,14 @@
 <?php
-// filepath: /php/check_reservation.php
 session_start(); // Initialize session
 
-// If the user is logged in, redirect them to their profile
+// user login check
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
 }
 include('connection.php');
 
+// Initialize variables
 $confirmation_number = '';
 $reservation = null;
 $error = '';
@@ -16,15 +16,19 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmation_number = $_POST['confirmation_number'];
 
+    // Fetch reservation data
     $sql = "SELECT r.id, r.date, r.time, t.id AS table_id, t.capacity, r.status
             FROM reservations r
             JOIN tables t ON r.table_id = t.id
             WHERE r.confirmation_number = ?";
+    
+    // Prepare and execute the SQL statement
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $confirmation_number);
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Check if reservation exists
     if ($result->num_rows === 1) {
         $reservation = $result->fetch_assoc();
     } else {
@@ -47,15 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="main-content">
         <div class="form-container">
             <h2>Check Your Reservation</h2>
-            <form method="POST">
+            <form method="POST"> <!-- Form to check reservation -->
                 <label for="confirmation_number">Confirmation Number:</label>
                 <input type="text" name="confirmation_number" id="confirmation_number" placeholder="Confirmation Number" value="<?php echo htmlspecialchars($confirmation_number); ?>" required>
                 <button type="submit">Check Reservation</button>
             </form>
 
-            <?php if ($error): ?>
+            <?php if ($error): ?> <!-- Display error message if set -->
                 <p class="error"><?php echo htmlspecialchars($error); ?></p>
-            <?php elseif ($reservation): ?>
+            <?php elseif ($reservation): ?> <!-- Display reservation details if found -->
                 <h3>Reservation Details</h3>
                 <p><strong>Reservation ID:</strong> <?php echo $reservation['id']; ?></p>
                 <p><strong>Date:</strong> <?php echo $reservation['date']; ?></p>

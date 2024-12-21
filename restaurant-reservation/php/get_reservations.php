@@ -28,14 +28,16 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 $reservations = [];
+// Fetch the results into an array
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $reservations[] = $row;
     }
 }
 
-echo json_encode($reservations);
+echo json_encode($reservations); // Return the reservations as JSON
 
+// Close the statement and connection
 $stmt->close();
 $conn->close();
 ?>

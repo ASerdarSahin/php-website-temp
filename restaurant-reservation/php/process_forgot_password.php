@@ -1,5 +1,4 @@
 <?php
-// filepath: /php/process_forgot_password.php
 
 session_start();
 include 'connection.php';
@@ -23,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows === 1) {
+        if ($result->num_rows === 1) { // User found
             $user = $result->fetch_assoc();
 
             // Verify secret key
@@ -35,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     throw new Exception('Failed to prepare update statement.');
                 }
                 $updateStmt->bind_param("si", $hashed_new_password, $user['id']);
-                if ($updateStmt->execute()) {
+                if ($updateStmt->execute()) { // Password updated
                     $_SESSION['message'] = "Password reset successful. Please login with your new password.";
                     header("Location: login.php");
                     exit();
@@ -52,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = $e->getMessage();
         header("Location: forgot_password.php");
         exit();
-    } finally {
+    } finally { // Close statement and connection
         if (isset($stmt)) {
             $stmt->close();
         }

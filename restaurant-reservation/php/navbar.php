@@ -1,6 +1,5 @@
-<!-- filepath: php/navbar.php -->
 <nav>
-    <?php if(isset($_SESSION['user_id'])): ?>
+    <?php if(isset($_SESSION['user_id'])): ?> <!-- user login check -->
         <a href="/restaurant-reservation/index.php">Home</a>
         <a href="/restaurant-reservation/php/profile.php">My Profile</a>
         <?php if($_SESSION['role'] === 'admin'): ?>
@@ -10,7 +9,7 @@
             <a href="/restaurant-reservation/php/owner_panel.php">Owner Panel</a>
         <?php endif; ?>
         <a href="/restaurant-reservation/php/logout.php">Logout</a>
-    <?php else: ?>
+    <?php else: ?> <!-- If the user is not logged in -->
         <a href="/restaurant-reservation/index.php">Home</a>
         <a href="/restaurant-reservation/php/login.php">Login</a>
         <a href="/restaurant-reservation/php/register.php">Register</a>

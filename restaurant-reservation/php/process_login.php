@@ -1,9 +1,9 @@
 <?php
-// filepath: /php/process_login.php
 
 session_start();
 require_once 'connection.php';
 
+// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $username = $_POST['username'];
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = $e->getMessage();
         header("Location: login.php");
         exit();
-    } finally {
+    } finally { // Close statement and connection
         if (isset($stmt)) {
             $stmt->close();
         }

@@ -1,15 +1,16 @@
 <?php
-// filepath: /c:/xampp/htdocs/restaurant-reservation/php/edit_user_message.php
 session_start();
 
-
-if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['admin', 'owner'])) {
-    header('Location: login.php');
+// Check if the user is logged in and has admin role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    $_SESSION['error'] = "Access denied. Only administrators can edit user roles.";
+    header('Location: ../index.php');
     exit();
 }
 
 include('connection.php');
 
+// Fetch user data and update message
 try {
     // Validate and sanitize the user ID parameter
     if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -27,10 +28,12 @@ try {
     $stmt->execute();
     $result = $stmt->get_result();
 
+    // Check if user exists
     if ($result->num_rows === 0) {
         throw new Exception('User not found.');
     }
 
+    // Fetch user data
     $user = $result->fetch_assoc();
 
     // Handle form submission
@@ -42,7 +45,7 @@ try {
             }
             $message = trim($_POST['message']);
 
-            // Optional: Further sanitize the message if necessary
+            // Further sanitize the message if necessary
             $sanitized_message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
 
             // Update user message within a transaction
@@ -55,6 +58,7 @@ try {
             }
             $updateStmt->bind_param('si', $sanitized_message, $user_id);
 
+            // Execute the update statement
             if (!$updateStmt->execute()) {
                 throw new Exception('Failed to update user message.');
             }
@@ -62,7 +66,7 @@ try {
             $conn->commit();
 
             // Success message
-            header('Location: admin_panel.php?message=User message updated successfully');
+            header('Location: user_management.php?message=User message updated successfully');
             exit();
         } catch (Exception $e) {
             // Rollback transaction on error
@@ -70,7 +74,7 @@ try {
             // Redirect with error message
             header('Location: edit_user_message.php?id=' . urlencode($user_id) . '&error=' . urlencode($e->getMessage()));
             exit();
-        } finally {
+        } finally { // Close prepared statements
             if (isset($updateStmt)) {
                 $updateStmt->close();
             }
@@ -78,9 +82,9 @@ try {
     }
 } catch (Exception $e) {
     $_SESSION['error'] = $e->getMessage();
-    header('Location: admin_panel.php?error=' . urlencode($e->getMessage()));
+    header('Location: user_management.php?error=' . urlencode($e->getMessage()));
     exit();
-} finally {
+} finally { // Close prepared statements and database connection
     if (isset($stmt)) {
         $stmt->close();
     }
@@ -104,7 +108,7 @@ try {
         <?php if (isset($_GET['error'])): ?>
             <p class="error"><?php echo htmlspecialchars($_GET['error']); ?></p>
         <?php endif; ?>
-        <form method="POST">
+        <form method="POST"> <!-- Form to update user message -->
             <label for="message">Message:</label>
             <textarea name="message" id="message" rows="5" cols="50" required><?php echo htmlspecialchars($user['message']); ?></textarea>
             <button type="submit">Update Message</button>

@@ -126,6 +126,7 @@ form {
     /* Add any necessary padding or margin if needed */
 }
 
+/* Input, Select, and Textarea Styles */
 input, select, textarea {
     width: 100%;
     padding: 12px;
@@ -134,6 +135,7 @@ input, select, textarea {
     border-radius: 4px;
 }
 
+/* Button Styles */
 button {
     background-color: var(--primary-color);
     color: #fff;
@@ -157,6 +159,7 @@ button:hover {
     margin: 1.5rem 0;
 }
 
+/* Button Styles */
 .btn {
     padding: 0.8rem 1.5rem;
     border-radius: 4px;
@@ -191,6 +194,7 @@ table {
     margin: 20px 0;
 }
 
+/* Table Header, Table Data Styles */
 th, td {
     padding: 12px;
     border: 1px solid #ddd;
@@ -202,6 +206,7 @@ th {
     color: #fff;
 }
 
+/* Alternate Row Colors */
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
@@ -234,6 +239,7 @@ tr:nth-child(even) {
     border-radius: 5px;
 }
 
+/* Promotion Message Heading */
 .promotion-message h3 {
     margin-top: 0;
     color: var(--primary-color);
@@ -249,62 +255,65 @@ footer {
 }
 
 /* Responsive Design */
+/* Tablet and below */
 @media (max-width: 1024px) {
     .columns {
-        flex-direction: column;
+        flex-direction: column;                 /* Stack columns vertically on smaller screens */
     }
 
     .description-section,
     .reservation-section {
-        margin: 0;
+        margin: 0;                              /* Remove margin on smaller screens */
     }
 
     .hero-image {
-        height: 250px;
+        height: 250px;                          /* Reduce hero image height on smaller screens */
     }
 }
 
+/* Mobile Landscape and below */
 @media (max-width: 768px) {
     nav {
-        flex-direction: column;
+        flex-direction: column;                 /* Stack navbar links vertically */
     }
 
     nav a {
-        width: 100%;
-        text-align: left;
-        padding-left: 20px;
+        width: 100%;                            /* Make navbar links span full width */
+        text-align: left;                       /* Left-align text within navbar links */
+        padding-left: 20px;                     /* Add left padding for indentation */
     }
 
     .hero-image {
-        height: 200px;
+        height: 200px;                          /* Further reduce hero image height */
     }
 
     .description-section,
     .reservation-section {
-        padding: 15px;
+        padding: 15px;                          /* Reduce padding inside sections */
     }
 
     button,
     .btn {
-        width: 100%;
+        width: 100%;                            /* Make buttons span full width */
     }
 
     .action-buttons {
-        flex-direction: column;
+        flex-direction: column;                 /* Stack action buttons vertically */
     }
 }
 
+/* Mobile Portrait and below */
 @media (max-width: 480px) {
     .hero-image {
-        height: 150px;
+        height: 150px;                          /* Further reduce hero image height for very small screens */
     }
 
     header {
-        padding: 0.5rem 0;
+        padding: 0.5rem 0;                      /* Reduce header padding */
     }
 
     footer {
-        padding: 0.5rem 0;
+        padding: 0.5rem 0;                      /* Reduce footer padding */
     }
 }
 

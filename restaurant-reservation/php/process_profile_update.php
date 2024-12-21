@@ -1,12 +1,13 @@
-<!-- filepath: /php/process_profile_update.php -->
 <?php
 session_start();
+// check user login
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 include('connection.php');
 
+// Get user ID from session
 $user_id = $_SESSION['user_id'];
 $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -40,7 +41,7 @@ try {
     header('Location: profile_edit.php?error=' . urlencode($e->getMessage()));
     exit();
 }
-
+  // Close prepared statements and database connection
   finally {
     if (isset($checkStmt)) {
         $checkStmt->close();

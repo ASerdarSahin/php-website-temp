@@ -1,12 +1,14 @@
 <?php
 session_start();
+
+// Logged in and admin role check
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: login.php');
     exit();
 }
 include('connection.php');
 
-// Fetch reservation statistics
+// Fetch reservation statistics grouped by date and ascending
 $stats = $conn->query("
     SELECT date, COUNT(*) as total_reservations
     FROM reservations
@@ -30,12 +32,12 @@ $stats = $conn->query("
                 <th>Date</th>
                 <th>Total Reservations</th>
             </tr>
-            <?php while ($stat = $stats->fetch_assoc()): ?>
+            <?php while ($stat = $stats->fetch_assoc()): ?> <!-- Loop through each statistic -->
                 <tr>
                     <td><?php echo $stat['date']; ?></td>
                     <td><?php echo $stat['total_reservations']; ?></td>
                 </tr>
-            <?php endwhile; ?>
+            <?php endwhile; ?> <!-- End of statistics loop -->
         </table>
         <div class="button-container" style="text-align: center; margin-top: 20px;">
             <button onclick="window.location.href='admin_panel.php'" class="edit-button">Back to Admin Panel</button>

@@ -7,7 +7,7 @@ include('connection.php');
 
 try {
     // Prepare the SQL statement to fetch restaurant information
-    // Assuming there's only one restaurant entry with id = 1
+    // Assuming there's only one restaurant entry with id = 1 !!!
     $sql = "SELECT name, address, phone FROM restaurants WHERE id = 1";
     $stmt = $conn->prepare($sql);
     
@@ -33,7 +33,7 @@ try {
     // Log the error for debugging
     error_log("Error in contact_us.php: " . $e->getMessage());
     
-    // Optionally, set a session error message and redirect to the 500 error page
+    // Set a session error message and redirect to the 500 error page
     $_SESSION['error'] = "An unexpected error occurred. Please try again later.";
     header("Location: 500.php");
     exit();

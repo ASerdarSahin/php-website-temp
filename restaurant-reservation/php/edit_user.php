@@ -1,8 +1,7 @@
 <?php
-// filepath: /c:/xampp/htdocs/restaurant-reservation/php/edit_user.php
 session_start();
 
-
+// Check if the user is logged in and has admin role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     $_SESSION['error'] = "Access denied. Only administrators can edit user roles.";
     header('Location: ../index.php');
@@ -11,6 +10,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 include('connection.php');
 
+// Fetch user data and update role
 try {
     // Validate and sanitize the user ID parameter
     if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -59,6 +59,7 @@ try {
             }
             $updateStmt->bind_param('si', $new_role, $user_id);
 
+            // Execute the update statement
             if (!$updateStmt->execute()) {
                 throw new Exception('Failed to update user role.');
             }
@@ -74,7 +75,7 @@ try {
             // Redirect with error message
             header('Location: edit_user.php?id=' . urlencode($user_id) . '&error=' . urlencode($e->getMessage()));
             exit();
-        } finally {
+        } finally { // Close prepared statements
             if (isset($updateStmt)) {
                 $updateStmt->close();
             }
@@ -84,7 +85,7 @@ try {
     $_SESSION['error'] = $e->getMessage();
     header('Location: user_management.php?error=' . urlencode($e->getMessage()));
     exit();
-} finally {
+} finally { // Close prepared statements and database connection
     if (isset($stmt)) {
         $stmt->close();
     }
@@ -108,7 +109,7 @@ try {
         <?php if (isset($_GET['error'])): ?>
             <p class="error"><?php echo htmlspecialchars($_GET['error']); ?></p>
         <?php endif; ?>
-        <form method="POST">
+        <form method="POST"> <!-- Form to update user role -->
             <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
             <p><strong>Current Role:</strong> <?php echo htmlspecialchars($user['role']); ?></p>

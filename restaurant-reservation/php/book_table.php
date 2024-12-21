@@ -2,6 +2,7 @@
 session_start();
 header('Content-Type: application/json');
 
+// user login check
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'Not logged in']);
     exit();
@@ -35,7 +36,7 @@ try {
     $date = date('Y-m-d', strtotime($slot_datetime));
     $time = date('H:i:s', strtotime($slot_datetime));
 
-    // Set restaurant_id (assuming single restaurant with id = 1)
+    // Set restaurant_id (assuming single restaurant with id = 1 !!!)
     $restaurant_id = 1;
 
     // Generate a unique confirmation number
@@ -93,7 +94,7 @@ try {
 } catch (Exception $e) {
     $conn->rollback();
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
-} finally {
-    $conn->close();
+} finally { // Close connection
+    $conn->close(); 
 }
 ?>

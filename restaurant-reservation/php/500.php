@@ -1,11 +1,8 @@
-<?php
-// filepath: /php/500.php
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Server Error</title>
+    <title>Server Error</title> <!-- Page title indicating a server error -->
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>

@@ -1,6 +1,7 @@
 <?php
-// filepath: /php/login.php
 session_start();
+
+// check user login
 if (isset($_SESSION['user_id'])) {
     header('Location: profile.php');
     exit();
@@ -34,7 +35,7 @@ if (isset($_SESSION['user_id'])) {
                 unset($_SESSION['error']); // Clear the error after displaying
             }
             ?>
-            <form action="process_login.php" method="POST">
+            <form action="process_login.php" method="POST"> <!-- Form submission to process_login.php -->
                 <label for="username">Username:</label>
                 <input type="text" name="username" id="username" placeholder="Username" required>
 
