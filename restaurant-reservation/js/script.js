@@ -110,9 +110,12 @@ $(document).ready(function() { // Wait for the document to be fully loaded
             success: function(data) {
                 reserveButton.prop('disabled', false).text('Reserve');
                 if (data.success) {
-                    showMessage(`Reservation successful! Your confirmation number is: ${data.confirmation_number}`, 'success');
-                    // Remove the reserved time slot from the dropdown
-                    timeslotSelect.find(`option[value="${reservationForm.find('select[name="timeslot_id"]').val()}"]`).remove();
+                    showMessage(
+                        `Reservation successful! Your confirmation number is: ${data.confirmation_number}`, 
+                        'success'
+                    );
+                    // Re-fetch tables so the UI updates
+                    fetchTables();
                     // Reset the form
                     reservationForm[0].reset();
                     tableSelect.prop('disabled', true);
